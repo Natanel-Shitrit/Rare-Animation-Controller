@@ -1,4 +1,4 @@
- //	Rare-Animation-Controller is a SourcePawn plugin (.sp) that tweaks the usage of rare weapon animations.
+//	Rare-Animation-Controller is a SourcePawn plugin (.sp) that tweaks the usage of rare weapon animations.
 //	Copyright (C) 2021  Natanel 'LuqS' Shitrit & Omer 'KoNLiG' Ben Tzion.
 
 //	This program is free software: you can redistribute it and/or modify
@@ -44,7 +44,7 @@ public Plugin myinfo =
 	name = "[CS:GO] Rare Animation Controller", 
 	author = "Natanel 'LuqS', KoNLiG", 
 	description = "Tweaks the usage of rare weapon animations.", 
-	version = "1.0.0", 
+	version = "1.0.1", 
 	url = "https://github.com/Natanel-Shitrit/Rare-Animation-Controller"
 };
 
@@ -59,13 +59,13 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	
 	g_OnRareAnimation = new GlobalForward(
 		"OnRareAnimation", 
-		ET_Event, 
-		Param_Cell,  // client
-		Param_Cell,  // weapon
-		Param_Cell,  // sequence_type
-		Param_Cell,  // sequence_index
+		ET_Event,
+		Param_Cell, // client
+		Param_Cell, // weapon
+		Param_Cell, // sequence_type
+		Param_Cell, // sequence_index
 		Param_Float // duration
-		);
+	);
 	
 	RegPluginLibrary("RareAnimationController");
 	
@@ -262,8 +262,8 @@ bool LoadWeaponSequences(int client, RareSequences rare_sequences, int &predicte
 		
 		// Find sequence type.
 		sequence_type = StrContains(sequence_name, "draw") != -1 ? RARE_SEQUENCE_DRAW : 
-		StrContains(sequence_name, "idle") != -1 ? RARE_SEQUENCE_IDLE : 
-		StrContains(sequence_name, "lookat") != -1 ? RARE_SEQUENCE_INSPECT : RARE_SEQUENCE_NONE;
+						StrContains(sequence_name, "idle") != -1 ? RARE_SEQUENCE_IDLE : 
+						StrContains(sequence_name, "lookat") != -1 ? RARE_SEQUENCE_INSPECT : RARE_SEQUENCE_NONE;
 		
 		// Skip unrelated sequences.
 		if (sequence_type == RARE_SEQUENCE_NONE)

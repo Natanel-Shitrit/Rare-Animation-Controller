@@ -44,7 +44,7 @@ public Plugin myinfo =
 	name = "[CS:GO] Rare Animation Controller", 
 	author = "Natanel 'LuqS', KoNLiG", 
 	description = "Tweaks the usage of rare weapon animations.", 
-	version = "1.0.1", 
+	version = "1.0.2", 
 	url = "https://github.com/Natanel-Shitrit/Rare-Animation-Controller"
 };
 

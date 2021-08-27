@@ -265,8 +265,8 @@ bool LoadWeaponSequences(int client, RareSequences rare_sequences, int &predicte
 						StrContains(sequence_name, "idle") != -1 ? RARE_SEQUENCE_IDLE : 
 						StrContains(sequence_name, "lookat") != -1 ? RARE_SEQUENCE_INSPECT : RARE_SEQUENCE_NONE;
 		
-		// Skip unrelated sequences.
-		if (sequence_type == RARE_SEQUENCE_NONE)
+		// Skip unrelated sequences, or sequences without act weight.
+		if (sequence_type == RARE_SEQUENCE_NONE || sequence.actweight <= 0)
 		{
 			continue;
 		}

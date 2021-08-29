@@ -44,7 +44,7 @@ public Plugin myinfo =
 	name = "[CS:GO] Rare Animation Controller", 
 	author = "Natanel 'LuqS', KoNLiG", 
 	description = "Tweaks the usage of rare weapon animations.", 
-	version = "1.0.2", 
+	version = "1.0.3", 
 	url = "https://github.com/Natanel-Shitrit/Rare-Animation-Controller"
 };
 
@@ -172,6 +172,11 @@ public void OnPlayerRunCmdPost(int client, int buttons, int impulse, const float
 
 Action Listener_LookAtWeapon(int client, const char[] command, int argc)
 {
+	if (!IsClientInGame(client))
+	{
+		return;
+	}
+
 	// Load weapon sequences if not already loaded.
 	int predicted_viewmodel, weapon;
 	RareSequences rare_sequences;

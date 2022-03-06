@@ -211,10 +211,8 @@ Action Listener_LookAtWeapon(int client, const char[] command, int argc)
 bool LoadWeaponSequences(int client, RareSequences rare_sequences, int &predicted_viewmodel, int &weapon)
 {
 	// Get client predicted viewmodel.
-	predicted_viewmodel = GetEntPropEnt(client, Prop_Send, "m_hViewModel");
-	
 	// Get the client active weapon by 'predicted_viewmodel'.
-	if (!weapon && (weapon = GetEntPropEnt(predicted_viewmodel, Prop_Send, "m_hWeapon")) == -1)
+	if ((predicted_viewmodel = GetEntPropEnt(client, Prop_Send, "m_hViewModel")) == -1 || (!weapon && (weapon = GetEntPropEnt(predicted_viewmodel, Prop_Send, "m_hWeapon")) == -1))
 	{
 		return false;
 	}
@@ -265,8 +263,8 @@ bool LoadWeaponSequences(int client, RareSequences rare_sequences, int &predicte
 		StrContains(sequence_name, "idle") != -1 ? RARE_SEQUENCE_IDLE : 
 		StrContains(sequence_name, "lookat") != -1 ? RARE_SEQUENCE_INSPECT : RARE_SEQUENCE_NONE;
 		
-		// Skip unrelated sequences.
-		if (sequence_type == RARE_SEQUENCE_NONE)
+		// Skip unrelated sequences or sequences without act weight.
+		if (sequence_type == RARE_SEQUENCE_NONE || sequence.actweight <= 0)
 		{
 			continue;
 		}
@@ -306,7 +304,7 @@ bool LoadWeaponSequences(int client, RareSequences rare_sequences, int &predicte
 			// Load animation index of the sequece.
 			animation = studio_hdr.GetAnimation(LoadFromAddress(view_as<Address>(sequence) + view_as<Address>(sequence.animindexindex), NumberType_Int32));
 			
-			// Save duratoin of animation with formula: number of frames in the animation / frames per second.
+			// Save duration of animation with formula: number of frames in the animation / frames per second.
 			rare_sequences.duration[current_sequence] = float(animation.numframes) / animation.fps;
 		}
 	}

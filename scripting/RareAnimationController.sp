@@ -225,7 +225,7 @@ any Native_GetRareAnimationIndex(Handle plugin, int numParams)
     }
 
     RareSequences rare_sequences;
-    if (!g_RareSequences.GetArray(weapon_defindex, rare_sequences, sizeof(rare_sequences)))
+    if (!g_RareSequences.GetArray(definition_index, rare_sequences, sizeof(rare_sequences)))
     {
         return -1;
     }
@@ -245,7 +245,7 @@ any Native_GetRareAnimationDuration(Handle plugin, int numParams)
     }
 
     RareSequences rare_sequences;
-    if (!g_RareSequences.GetArray(weapon_defindex, rare_sequences, sizeof(rare_sequences)))
+    if (!g_RareSequences.GetArray(definition_index, rare_sequences, sizeof(rare_sequences)))
     {
         return 0.0;
     }

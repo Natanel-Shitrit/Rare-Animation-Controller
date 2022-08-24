@@ -174,7 +174,7 @@ Action Listener_LookAtWeapon(int client, const char[] command, int argc)
 {
     if (!IsClientInGame(client))
     {
-        return;
+        return Plugin_Continue;
     }
 
     // Load weapon sequences if not already loaded.
@@ -182,19 +182,19 @@ Action Listener_LookAtWeapon(int client, const char[] command, int argc)
     RareSequences rare_sequences;
     if (!LoadWeaponSequences(client, rare_sequences, predicted_viewmodel, weapon) || rare_sequences.index[RARE_SEQUENCE_INSPECT] == -1)
     {
-        return;
+        return Plugin_Continue;
     }
     
     // Call animation forward to allow plugins to block it.
     if (Call_OnRareAnimation(client, weapon, RARE_SEQUENCE_INSPECT, rare_sequences.index[RARE_SEQUENCE_INSPECT], rare_sequences.duration[RARE_SEQUENCE_INSPECT]) >= Plugin_Handled)
     {
-        return;
+        return Plugin_Continue;
     }
     
     // If the client is available for sequence changes, apply the rare inspect sequence. 
     if (!GetEntProp(client, Prop_Send, "m_bIsLookingAtWeapon", 1))
     {
-        return;
+        return Plugin_Continue;
     }
     
     // Set rare animation.
@@ -211,6 +211,8 @@ Action Listener_LookAtWeapon(int client, const char[] command, int argc)
     
     // Store new animation duration.
     SetEntData(client, m_flLookWeaponEndTimeOffset, GetGameTime() + rare_sequences.duration[RARE_SEQUENCE_INSPECT]);
+
+    return Plugin_Continue;
 }
 
 bool LoadWeaponSequences(int client, RareSequences rare_sequences, int &predicted_viewmodel, int &weapon)

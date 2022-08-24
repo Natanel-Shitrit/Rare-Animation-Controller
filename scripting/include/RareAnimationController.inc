@@ -21,11 +21,11 @@
 
 enum
 {
-	RARE_SEQUENCE_DRAW, 
-	RARE_SEQUENCE_IDLE, 
-	RARE_SEQUENCE_INSPECT, 
-	RARE_SEQUENCE_MAX, 
-	RARE_SEQUENCE_NONE
+    RARE_SEQUENCE_DRAW, 
+    RARE_SEQUENCE_IDLE, 
+    RARE_SEQUENCE_INSPECT, 
+    RARE_SEQUENCE_MAX, 
+    RARE_SEQUENCE_NONE
 }
 
 /**
@@ -66,15 +66,15 @@ forward Action OnRareAnimation(int client, int weapon, int sequence_type, int se
 #if !defined REQUIRE_PLUGIN
 public void __pl_rare_animation_controller_SetNTVOptional()
 {
-	MarkNativeAsOptional("GetRareAnimationIndex");
-	MarkNativeAsOptional("GetRareAnimationDuration");
+    MarkNativeAsOptional("GetRareAnimationIndex");
+    MarkNativeAsOptional("GetRareAnimationDuration");
 }
 #endif
 
 public SharedPlugin __pl_rare_animation_controller = 
 {
-	name = "RareAnimationController", 
-	file = "RareAnimationController.smx", 
+    name = "RareAnimationController", 
+    file = "RareAnimationController.smx", 
 #if defined REQUIRE_PLUGIN
     required = 1, 
 #else

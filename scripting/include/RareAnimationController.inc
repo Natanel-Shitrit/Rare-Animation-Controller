@@ -29,6 +29,28 @@ enum
 }
 
 /**
+ * Retrieves the rare sequence index of an econ item.
+ * 
+ * @param definition_index	Item definition index.
+ * @param sequence_type     Sequence type, see the enum above.
+ * 
+ * @return 					Sequence index, or -1 if no sequences were loaded for the given definition index.		
+ * @error					Invalid sequence type.
+ */
+int GetRareAnimationIndex(int definition_index, int sequence_type);
+
+/**
+ * Retrieves the rare sequence duration of an econ item.
+ * 
+ * @param definition_index	Item definition index.
+ * @param sequence_type     Sequence type, see the enum above.
+ * 
+ * @return 					Animation duration (in seconds), or 0.0 if no sequences were loaded for the given definition index.
+ * @error					Invalid item definition index or invalid sequence type.
+ */
+float GetRareAnimationDuration(int definition_index, int sequence_type);
+
+/**
  * Called before a rare animation sequence is applied.
  *
  * @param client            Client index.	
@@ -40,6 +62,14 @@ enum
  * @return                  Plugin_Handled or higher to block the sequence change.
  */
 forward Action OnRareAnimation(int client, int weapon, int sequence_type, int sequence_index, float duration);
+
+#if !defined REQUIRE_PLUGIN
+public void __pl_rare_animation_controller_SetNTVOptional()
+{
+	MarkNativeAsOptional("GetRareAnimationIndex");
+	MarkNativeAsOptional("GetRareAnimationDuration");
+}
+#endif
 
 public SharedPlugin __pl_rare_animation_controller = 
 {

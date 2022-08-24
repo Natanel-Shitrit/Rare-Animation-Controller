@@ -44,7 +44,7 @@ public Plugin myinfo =
     name = "[CS:GO] Rare Animation Controller", 
     author = "Natanel 'LuqS', KoNLiG", 
     description = "Tweaks the usage of rare weapon animations.", 
-    version = "1.0.5", 
+    version = "1.2.5", 
     url = "https://github.com/Natanel-Shitrit/Rare-Animation-Controller"
 };
 
@@ -57,34 +57,11 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
         return APLRes_Failure;
     }
     
-    g_OnRareAnimation = new GlobalForward(
-        "OnRareAnimation", 
-        ET_Event,
-        Param_Cell, // client
-        Param_Cell, // weapon
-        Param_Cell, // sequence_type
-        Param_Cell, // sequence_index
-        Param_Float // duration
-    );
-    
+    InitializeAPI();
+
     RegPluginLibrary("RareAnimationController");
     
     return APLRes_Success;
-}
-
-Action Call_OnRareAnimation(int client, int weapon, int sequence_type, int sequence_index, float duration)
-{
-    Action result;
-    
-    Call_StartForward(g_OnRareAnimation);
-    Call_PushCell(client);
-    Call_PushCell(weapon);
-    Call_PushCell(sequence_type);
-    Call_PushCell(sequence_index);
-    Call_PushFloat(duration);
-    Call_Finish(result);
-    
-    return result;
 }
 
 public void OnPluginStart()
@@ -104,6 +81,8 @@ public void OnPluginStart()
         }
     }
 }
+
+//================================[ Events ]================================//
 
 public void OnClientPutInServer(int client)
 {
@@ -215,6 +194,83 @@ Action Listener_LookAtWeapon(int client, const char[] command, int argc)
     return Plugin_Continue;
 }
 
+//================================[ API ]================================//
+
+void InitializeAPI()
+{
+    CreateNative("GetRareAnimationIndex", Native_GetRareAnimationIndex);
+    CreateNative("GetRareAnimationDuration", Native_GetRareAnimationDuration);
+
+    g_OnRareAnimation = new GlobalForward(
+        "OnRareAnimation", 
+        ET_Event,
+        Param_Cell, // client
+        Param_Cell, // weapon
+        Param_Cell, // sequence_type
+        Param_Cell, // sequence_index
+        Param_Float // duration
+    );
+}
+
+// Natives.
+any Native_GetRareAnimationIndex(Handle plugin, int numParams)
+{
+    int definition_index = GetNativeCell(1);
+
+    int sequence_type = GetNativeCell(2);
+
+    if (!(0 <= sequence_type <= RARE_SEQUENCE_MAX))
+    {
+        ThrowNativeError(SP_ERROR_NATIVE, "Invalid sequence type: %d. (Valid range: 0-%d)", sequence_type, RARE_SEQUENCE_MAX);
+    }
+
+    RareSequences rare_sequences;
+    if (!g_RareSequences.GetArray(weapon_defindex, rare_sequences, sizeof(rare_sequences)))
+    {
+        return -1;
+    }
+    
+    return rare_sequences.index[sequence_type];
+}
+
+any Native_GetRareAnimationDuration(Handle plugin, int numParams)
+{
+    int definition_index = GetNativeCell(1);
+
+    int sequence_type = GetNativeCell(2);
+
+    if (!(0 <= sequence_type <= RARE_SEQUENCE_MAX))
+    {
+        ThrowNativeError(SP_ERROR_NATIVE, "Invalid sequence type: %d. (Valid range: 0-%d)", sequence_type, RARE_SEQUENCE_MAX);
+    }
+
+    RareSequences rare_sequences;
+    if (!g_RareSequences.GetArray(weapon_defindex, rare_sequences, sizeof(rare_sequences)))
+    {
+        return 0.0;
+    }
+    
+    return rare_sequences.duration[sequence_type];
+}
+
+// Forwards.
+Action Call_OnRareAnimation(int client, int weapon, int sequence_type, int sequence_index, float duration)
+{
+    Action result;
+    
+    Call_StartForward(g_OnRareAnimation);
+    Call_PushCell(client);
+    Call_PushCell(weapon);
+    Call_PushCell(sequence_type);
+    Call_PushCell(sequence_index);
+    Call_PushFloat(duration);
+    Call_Finish(result);
+    
+    return result;
+}
+
+//================================[ Functions ]================================//
+
 bool LoadWeaponSequences(int client, RareSequences rare_sequences, int &predicted_viewmodel, int &weapon)
 {
     // Get client predicted viewmodel.
@@ -319,3 +375,5 @@ bool LoadWeaponSequences(int client, RareSequences rare_sequences, int &predicte
     // Save all data about animation in the weapon defindex.
     return g_RareSequences.SetArray(weapon_defindex, rare_sequences, sizeof(rare_sequences));
 } 
+
+//================================================================//

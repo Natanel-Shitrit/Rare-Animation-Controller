@@ -37,7 +37,7 @@ enum
  * @return                  Sequence index, or -1 if no sequences were loaded for the given definition index.		
  * @error                   Invalid sequence type.
  */
-int GetRareAnimationIndex(int definition_index, int sequence_type);
+native int GetRareAnimationIndex(int definition_index, int sequence_type);
 
 /**
  * Retrieves the rare sequence duration of an econ item.
@@ -48,7 +48,7 @@ int GetRareAnimationIndex(int definition_index, int sequence_type);
  * @return                  Animation duration (in seconds), or 0.0 if no sequences were loaded for the given definition index.
  * @error                   Invalid item definition index or invalid sequence type.
  */
-float GetRareAnimationDuration(int definition_index, int sequence_type);
+native float GetRareAnimationDuration(int definition_index, int sequence_type);
 
 /**
  * Called before a rare animation sequence is applied.
